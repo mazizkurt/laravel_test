@@ -67,7 +67,7 @@ pipeline {
         
         VITE_APP_NAME = "${APP_NAME}"
     }
-    stages {
+   stages {
         stage('Clone Repository') {
             steps {
                 git branch: 'main', url: 'https://github.com/mazizkurt/laravel_test'
