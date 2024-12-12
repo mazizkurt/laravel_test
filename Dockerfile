@@ -1,5 +1,5 @@
 # PHP-FPM'i içeren temel imajı kullanıyoruz
-FROM php:8.2-fpm
+FROM php:7.4-fpm
 
 # Gerekli bağımlılıkları kuruyoruz
 RUN apt-get update && apt-get install -y \
