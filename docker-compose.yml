@@ -1,36 +1,24 @@
-version: "3.8"
+version: '3.8'
 
 services:
-    app:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        container_name: laravel_app
-        ports:
-            - "8081:80"
-        volumes:
-            - .:/var/www/html  # Uygulamanızı konteynıra kopyalayın
-        networks:
-            - laravel_network
-        depends_on:
-            - db
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "8081:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+      - ./public:/var/www/html/public
+    depends_on:
+      - laravel
 
-    db:
-        image: mysql:8.0
-        container_name: laravel_db
-        environment:
-            MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: laravel
-            MYSQL_USER: laravel
-            MYSQL_PASSWORD: secret
-        volumes:
-            - db_data:/var/lib/mysql
-        networks:
-            - laravel_network
-
-networks:
-    laravel_network:
-        driver: bridge
-
-volumes:
-    db_data:
+  laravel:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel_test
+    volumes:
+      - .:/var/www/html
+    expose:
+      - "9000"

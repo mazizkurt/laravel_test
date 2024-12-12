@@ -11,18 +11,22 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install pdo_mysql zip
-    # Install Composer
+
+# Composer'ı indirip kurun
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Set working directory
+# Çalışma dizinini ayarlayın
 WORKDIR /var/www/html
 
-# Copy application files
+# Uygulama dosyalarını kopyalayın
 COPY . /var/www/html
 
-# Install dependencies
+# Bağımlılıkları yükleyin
 RUN composer install --no-interaction --no-dev --optimize-autoloader
 
-# Set permissions
+# İzinleri ayarlayın
 RUN chown -R www-data:www-data /var/www/html/storage
 RUN chown -R www-data:www-data /var/www/html/bootstrap/cache
+
+# Apache'yi başlatın
+CMD ["php-fpm"]
