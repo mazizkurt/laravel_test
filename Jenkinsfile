@@ -13,7 +13,6 @@ pipeline {
         APP_FAKER_LOCALE = "en_US"
         
         APP_MAINTENANCE_DRIVER = "file"
-        # APP_MAINTENANCE_STORE = "database"
         
         PHP_CLI_SERVER_WORKERS = "4"
         
