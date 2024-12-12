@@ -1,19 +1,10 @@
-# PHP ve Apache için temel imaj
 FROM php:8.2-apache
 
 # Gerekli PHP uzantılarını kurun
 RUN docker-php-ext-install pdo pdo_mysql
 
-# Sistem güncellemeleri ve gerekli paketleri yükleyin
-RUN apt-get update && apt-get install -y \
-    php-cli \
-    php-mbstring \
-    php-xml \
-    curl \
-    git \
-    unzip && \
-    # Composer'ı indirip kurun
-    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Composer'ı indirip kurun
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Apache'nin mod_rewrite modülünü etkinleştirin
 RUN a2enmod rewrite
