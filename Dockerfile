@@ -1,7 +1,6 @@
 FROM php:8.2-apache
 
 # Gerekli PHP uzantılarını kurun
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN docker-php-ext-install pdo pdo_mysql
 
 # Composer'ı indirip kurun
@@ -24,7 +23,7 @@ RUN sed -i -e 's|/var/www/html|/var/www/html/public|' /etc/apache2/apache2.conf
 WORKDIR /var/www/html
 
 # Composer ile bağımlılıkları yükleyin
-RUN composer install
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
 # Apache'yi başlatın
 CMD ["apache2-foreground"]
