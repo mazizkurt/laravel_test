@@ -27,6 +27,3 @@ RUN composer install --no-interaction --no-dev --optimize-autoloader
 # İzinleri ayarlayın
 RUN chown -R www-data:www-data /var/www/html/storage
 RUN chown -R www-data:www-data /var/www/html/bootstrap/cache
-
-# Apache'yi başlatın
-CMD ["php-fpm"]
