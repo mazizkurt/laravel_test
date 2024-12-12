@@ -37,8 +37,3 @@ COPY ./default.conf /etc/nginx/conf.d/default.conf
 
 # Nginx ve PHP-FPM'i başlatan komutları ekleyelim
 CMD service nginx start && php-fpm
-
-# Portları expose edelim
-CMD ["php-fpm"]
-
-EXPOSE 9000
