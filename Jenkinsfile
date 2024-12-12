@@ -24,7 +24,7 @@ pipeline {
         LOG_LEVEL = "debug"
         
         DB_CONNECTION = "mysql"
-        DB_HOST = "mysql"
+        DB_HOST = "laravel_mysql"
         DB_PORT = "3306"
         DB_DATABASE = "laravel"
         DB_USERNAME = "user"
