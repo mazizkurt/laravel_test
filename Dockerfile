@@ -39,4 +39,6 @@ COPY ./default.conf /etc/nginx/conf.d/default.conf
 CMD service nginx start && php-fpm
 
 # Portları expose edelim
-EXPOSE 80
+CMD ["php-fpm"]
+
+EXPOSE 9000
