@@ -1,29 +1,28 @@
-FROM php:8.2-apache
+FROM php:8.2-fpm
 
 # Gerekli PHP uzantılarını kurun
-RUN docker-php-ext-install pdo pdo_mysql
+RUN apt-get update && apt-get install -y \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libzip-dev \
+    unzip \
+    git \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd \
+    && docker-php-ext-install pdo_mysql zip
+    # Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Composer'ı indirip kurun
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-# Apache'nin mod_rewrite modülünü etkinleştirin
-RUN a2enmod rewrite
-
-# Apache için belge kökünü /public olarak ayarlayın
-ENV APACHE_DOCUMENT_ROOT /var/www/html/public
-
-# Uygulamanın dosyalarını Docker konteynerine kopyalayın
-COPY . /var/www/html
-
-# Apache konfigürasyonunu düzenleyin
-RUN sed -i -e 's|/var/www/html|/var/www/html/public|' /etc/apache2/sites-available/000-default.conf
-RUN sed -i -e 's|/var/www/html|/var/www/html/public|' /etc/apache2/apache2.conf
-
-# Çalışma dizinini /var/www/html olarak ayarlayın
+# Set working directory
 WORKDIR /var/www/html
 
-# Composer ile bağımlılıkları yükleyin
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+# Copy application files
+COPY . /var/www/html
 
-# Apache'yi başlatın
-CMD ["apache2-foreground"]
+# Install dependencies
+RUN composer install --no-interaction --no-dev --optimize-autoloader
+
+# Set permissions
+RUN chown -R www-data:www-data /var/www/html/storage
+RUN chown -R www-data:www-data /var/www/html/bootstrap/cache
